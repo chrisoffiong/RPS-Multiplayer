@@ -1,0 +1,15 @@
+button {
+    float: right;
+}
+
+.jumbotron {
+    background: black !important;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-size: 2.3em;
+}
+
+.tab, .tab1 {
+    margin-bottom: 15px;
+}
