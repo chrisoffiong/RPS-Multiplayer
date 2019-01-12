@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+// firebase data
     var config = {
       apiKey: "AIzaSyBmrIcG3Fr31RlZ_kzIqWKNjYJCdmOdRdo",
       authDomain: "database-86cb1.firebaseapp.com",
@@ -8,11 +8,13 @@ $(document).ready(function () {
       storageBucket: "database-86cb1.appspot.com",
       messagingSenderId: "866258597301"
     };
+    // initializing firebase
     firebase.initializeApp(config);
   
     var database = firebase.database();
+    //standardize time
     var currentTime = moment();
-
+//storing data within the database
     database.ref().on("child_added", function(childSnap) {
     
         var name = childSnap.val().name;
@@ -21,24 +23,26 @@ $(document).ready(function () {
         var frequency = childSnap.val().frequency;
         var min = childSnap.val().min;
         var next = childSnap.val().next;
-    
+    //appending data to the table in the HTML based on values from the database on page load
         $("#trainTable > tbody").append("<tr><td>" + name + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + next + "</td><td>" + min + "</td></tr>");
     });
   
     
-    //
+    //upon button click
     $("#submit").on("click", function() {
-    
+    //pulling values from the user input field
         let trainName = $("#namevalue").val().trim();
         let destination = $("#destinationvalue").val().trim();
         let firstTrain = $("#timevalue").val().trim();
         let frequency = $("#freqvalue").val().trim();
-    
-        let firstTrainConverted = moment(firstTrain, "hh:mm").subtract("1, years");        let difference = currentTime.diff(moment(firstTrainConverted), "minutes");
+    //converting the train's time to the current date
+        let firstTrainConverted = moment(firstTrain, "hh:mm").subtract("1, years");
+    //math to display the amount of minutes until the next train
+        let difference = currentTime.diff(moment(firstTrainConverted), "minutes");
         let remainder = difference % frequency;
         let minUntilTrain = frequency - remainder;
         let nextTrain = moment().add(minUntilTrain, "minutes").format("hh:mm a");
-       
+       // calling upon the database
         let newTrain = {
             name: trainName,
             destination: destination,
@@ -48,7 +52,7 @@ $(document).ready(function () {
             next: nextTrain
         }
     
-        console.log(newTrain);
+        //pushing the value from the input field into the database.
         database.ref().push(newTrain);
     
         $("#namevalue").val("");
