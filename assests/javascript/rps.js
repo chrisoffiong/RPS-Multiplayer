@@ -11,18 +11,18 @@ $(document).ready(function () {
     // initializing firebase
     firebase.initializeApp(config);
   
-    var database = firebase.database();
+    let database = firebase.database();
     //standardize time
-    var currentTime = moment();
+    let currentTime = moment();
 //storing data within the database
     database.ref().on("child_added", function(childSnap) {
     
-        var name = childSnap.val().name;
-        var destination = childSnap.val().destination;
-        var firstTrain = childSnap.val().firstTrain;
-        var frequency = childSnap.val().frequency;
-        var min = childSnap.val().min;
-        var next = childSnap.val().next;
+        let name = childSnap.val().name;
+        let destination = childSnap.val().destination;
+        let firstTrain = childSnap.val().firstTrain;
+        let frequency = childSnap.val().frequency;
+        let min = childSnap.val().min;
+        let next = childSnap.val().next;
     //appending data to the table in the HTML based on values from the database on page load
         $("#trainTable > tbody").append("<tr><td>" + name + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + next + "</td><td>" + min + "</td></tr>");
     });
