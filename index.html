@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <title>TRAIN</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -25,7 +26,7 @@
                 <p>A Guide to the Next Train!!</p>
             </div>
         </div>
-        <table class="table table-striped">
+        <table class="table table-striped" id="trainTable">
 
             <thead class="tab">
                 <tr>
@@ -40,13 +41,7 @@
                     <th scope="col">Minutes Away</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <th scope="row" class="ename"></th>
-                    <td class="destination"></td>
-                    <td class="time"></td>
-                    <td class="freq"></td>
-                </tr>
+            <tbody id="tbody">
             </tbody>
         </table>
         <table class="table table-striped">
@@ -70,7 +65,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleFormControlInput1">Frequency (min)</label>
-                <input type="text" class="form-control" id="freqvalue" placeholder="Minutes Away">
+                <input type="text" class="form-control" id="freqvalue" placeholder="mins">
             </div>
 
             <button type="button" id="submit" class="btn btn-primary">Submit</button>

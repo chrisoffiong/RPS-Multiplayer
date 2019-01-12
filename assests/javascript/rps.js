@@ -11,35 +11,51 @@ $(document).ready(function () {
     firebase.initializeApp(config);
   
     var database = firebase.database();
+    var currentTime = moment();
 
-    let name = "";
-    let destination = "";
-    let time = "";
-    let frequency = "";
-    $('#submit').on('click', function (event) {
-        event.preventDefault();
-        name = $("#namevalue").val()
-        destination = $("#destinationvalue").val()
-        time = $("#timevalue").val()
-        frequency = $("#freqvalue").val()
-        console.log(name)
-        console.log(destination)
-        console.log(time)
-        console.log(frequency)
-    })
-    database.ref().push({
-        name: name,
-        destination: destination,
-        time: moment(time).format("MMMM Do YY"),
-        frequency: frequency,
-        dateAdded: firebase.database.ServerValue.TIMESTAMP
-      });
-    database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
-        var sv = snapshot.val();
-        let monthWorked = (moment().diff(moment(time), 'months'))
-        $(".ename").text(sv.name);
-        $(".destination").text(sv.destination);
-        $(".time").text(sv.time);
-        $(".freq").text(moment().diff(moment(time), 'month'))
+    database.ref().on("child_added", function(childSnap) {
+    
+        var name = childSnap.val().name;
+        var destination = childSnap.val().destination;
+        var firstTrain = childSnap.val().firstTrain;
+        var frequency = childSnap.val().frequency;
+        var min = childSnap.val().min;
+        var next = childSnap.val().next;
+    
+        $("#trainTable > tbody").append("<tr><td>" + name + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + next + "</td><td>" + min + "</td></tr>");
+    });
+  
+    
+    //
+    $("#submit").on("click", function() {
+    
+        let trainName = $("#namevalue").val().trim();
+        let destination = $("#destinationvalue").val().trim();
+        let firstTrain = $("#timevalue").val().trim();
+        let frequency = $("#freqvalue").val().trim();
+    
+        let firstTrainConverted = moment(firstTrain, "hh:mm").subtract("1, years");        let difference = currentTime.diff(moment(firstTrainConverted), "minutes");
+        let remainder = difference % frequency;
+        let minUntilTrain = frequency - remainder;
+        let nextTrain = moment().add(minUntilTrain, "minutes").format("hh:mm a");
+       
+        let newTrain = {
+            name: trainName,
+            destination: destination,
+            firstTrain: firstTrain,
+            frequency: frequency,
+            min: minUntilTrain,
+            next: nextTrain
+        }
+    
+        console.log(newTrain);
+        database.ref().push(newTrain);
+    
+        $("#namevalue").val("");
+        $("#destinationvalue").val("");
+        $("#timevalue").val("");
+        $("#freqvalue").val("");
+    
+        return false;
+    });
 })
-})    
